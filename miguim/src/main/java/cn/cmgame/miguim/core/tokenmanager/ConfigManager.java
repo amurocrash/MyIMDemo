@@ -119,7 +119,7 @@ public class ConfigManager
 				"status:0, \n" +
 				"message:\"\", \n" +
 				"token:\"1234567890\", \n" +
-				"server:\"192.168.1.103\", \n" +
+				"server:\"192.168.1.5\", \n" +
 				"port:5222, \n" +
 				"expire:7200, \n" +
 				"heartbeat:180, \n" +

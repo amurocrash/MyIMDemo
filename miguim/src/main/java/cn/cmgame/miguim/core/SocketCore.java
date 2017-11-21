@@ -132,7 +132,7 @@ public class SocketCore
 		{
 			mSocketManager.publishResult(
 					SocketManager.RESULT_CONNECT_FAILED,
-					MiguIM.IConnectionListener.ErrorCode.NOT_DISCONNECT, "");
+					MiguIM.ErrorCode.NOT_DISCONNECT, "");
 
 			return;
 		}
@@ -285,7 +285,7 @@ public class SocketCore
 
 				mSocketManager.publishResult(
 						SocketManager.RESULT_CONNECT_FAILED,
-						MiguIM.IConnectionListener.ErrorCode.CONNECT_EXCEPTION, e.getMessage());
+						MiguIM.ErrorCode.CONNECT_EXCEPTION, e.getMessage());
 
 				disconnect();
 			}

@@ -54,7 +54,10 @@ public class IMService extends Service
 					mSocketManager = new SocketManager(this);
 				}
 
-				mSocketManager.init();
+				Class<? extends IMIntentService> callbackClass =
+						(Class<? extends IMIntentService>) intent.getSerializableExtra("callback");
+
+				mSocketManager.init(callbackClass);
 
 			}
 			else if(ACTION_CONNECT.equals(action))

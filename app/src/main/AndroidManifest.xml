@@ -24,12 +24,27 @@
             </intent-filter>
         </activity>
 
+        <!-- 长连接配置 -->
+
+        <meta-data
+            android:name="MIGU_APP_ID"
+            android:value="1234567890" />
+        <meta-data
+            android:name="MIGU_APP_KEY"
+            android:value="1234567890" />
+
         <service android:name="cn.cmgame.miguim.IMService"
-            android:exported="true"
-            >
+                 android:exported="true"
+                 android:process=":imservice"
+        >
         </service>
 
-        <receiver android:name="cn.cmgame.miguim.IMReceiver">
+        <service android:name=".MsgIntentService">
+
+        </service>
+
+        <receiver android:name="cn.cmgame.miguim.IMReceiver"
+            >
             <intent-filter>
                 <action android:name="cn.cmgame.miguim.invoke"/>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -40,6 +55,15 @@
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="cn.cmgame.miguim.IMActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:process=":imservice"
+            android:taskAffinity="cn.cmgame.miguim.IMActivityTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
 
     </application>
 

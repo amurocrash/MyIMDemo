@@ -18,23 +18,23 @@ public abstract class AbsPacketDisposer<T extends AbsSocketPacket>
 	protected SocketCore socketCore;
 	protected Socket socketClient;
 	protected OutputStream outputStream;
-	protected MiguIM.ISendingListener sendingListener;
+//	protected MiguIM.ISendingListener sendingListener;
 	protected long sendTime = -1;
 	protected AbsSocketPacket packetForSend;
 
 	protected Logger logger;
 
-	public AbsPacketDisposer(T packet, SocketCore core)
-	{
-		this(packet, core, null);
-	}
+//	public AbsPacketDisposer(T packet, SocketCore core)
+//	{
+//		this(packet, core, null);
+//	}
 
-	public AbsPacketDisposer(T packet, SocketCore core, MiguIM.ISendingListener sendingListener)
+	public AbsPacketDisposer(T packet, SocketCore core)
 	{
 		this.packetForSend = packet;
 		this.socketCore = core;
 		this.socketClient = core.getSocketClient();
-		this.sendingListener = sendingListener;
+//		this.sendingListener = sendingListener;
 		this.logger = socketCore.logger;
 	}
 

@@ -30,7 +30,7 @@ public class VerifyPacketDisposer extends AbsPacketDisposer<VerifyPacket>
 		logger.v("verify timeout");
 		socketCore.getSocketManager().publishResult(
 				SocketManager.RESULT_CONNECT_FAILED,
-				MiguIM.IConnectionListener.ErrorCode.CONNECT_TIMEOUT, "");
+				MiguIM.ErrorCode.CONNECT_TIMEOUT, "");
 		socketCore.disconnect();
 	}
 

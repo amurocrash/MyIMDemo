@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import cn.cmgame.miguim.IMIntentService;
 import cn.cmgame.miguim.IMService;
 import cn.cmgame.miguim.MiguIM;
 import cn.cmgame.miguim.utils.DeviceUtils;
@@ -36,6 +37,7 @@ public class SocketManager
 
 	private Logger logger;
 	private Context mContext;
+	private Class<? extends IMIntentService> callbackClass;
 	private SocketCore socketCore;
 
 	public SocketManager(Context mContext)
@@ -59,18 +61,31 @@ public class SocketManager
 
 	public void publishResult(String result, Bundle data)
 	{
-		Intent i = new Intent();
-		i.setAction(IMCore.IM_BROADCAST_ACTION);
-		i.putExtra("result", result);
-		if(data != null)
-		{
-			i.putExtra("data", data);
-		}
-		mContext.sendBroadcast(i);
+		IMIntentService.onNewAction(
+				mContext, callbackClass, IMIntentService.ACTION_INVOKE, result, data);
+
+//		Intent intent = new Intent(mContext, IMIntentService.class);
+//		intent.setAction("");
+//		intent.putExtra("result", result);
+//		if(data != null)
+//		{
+//			intent.putExtra("data", data);
+//		}
+//		mContext.startService(intent);
+
+//		Intent i = new Intent();
+//		i.setAction(IMCore.IM_BROADCAST_ACTION);
+//		i.putExtra("result", result);
+//		if(data != null)
+//		{
+//			i.putExtra("data", data);
+//		}
+//		mContext.sendBroadcast(i);
 	}
 
-	public void init()
+	public void init(Class<? extends IMIntentService> callbackClass)
 	{
+		this.callbackClass = callbackClass;
 		publishResult(RESULT_INIT_SUCCESS);
 	}
 
