@@ -1,8 +1,8 @@
 package cn.cmgame.migu_im_demo;
 
-import cn.cmgame.miguim.IMIntentService;
-import cn.cmgame.miguim.MiguIM;
-import cn.cmgame.miguim.utils.ToastUtils;
+import cn.cmgame.migu_im_demo.utils.ToastUtils;
+import cn.cmgame.miguimsdk.IMIntentService;
+import cn.cmgame.miguimsdk.MiguIM;
 
 /**
  * Created by Amuro on 2017/11/20.

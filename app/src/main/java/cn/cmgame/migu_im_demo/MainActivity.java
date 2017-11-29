@@ -1,14 +1,12 @@
 package cn.cmgame.migu_im_demo;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import java.util.HashMap;
 
-import cn.cmgame.miguim.MiguIM;
-import cn.cmgame.miguim.utils.ToastUtils;
+import cn.cmgame.miguimsdk.MiguIM;
 
 public class MainActivity extends AppCompatActivity
 {

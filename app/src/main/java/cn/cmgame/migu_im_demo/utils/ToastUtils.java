@@ -1,10 +1,10 @@
-package cn.cmgame.miguim.utils;
+package cn.cmgame.migu_im_demo.utils;
 
 import android.content.Context;
 import android.widget.Toast;
 
 /**
- * Created by Amuro on 2017/10/25.
+ * Created by Amuro on 2017/11/21.
  */
 
 public class ToastUtils

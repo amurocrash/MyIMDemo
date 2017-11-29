@@ -1,14 +1,10 @@
-package cn.cmgame.miguim.core;
+package cn.cmgame.miguimsdk;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
 import java.io.Serializable;
-
-import cn.cmgame.miguim.IMIntentService;
-import cn.cmgame.miguim.IMService;
-import cn.cmgame.miguim.MiguIM;
 
 /**
  * Created by Amuro on 2017/10/20.
@@ -48,7 +44,7 @@ public class IMManager
 	{
 		Intent intent = new Intent();
 		ComponentName cn =
-				new ComponentName(sAppContext, "cn.cmgame.miguim.IMService");
+				new ComponentName(sAppContext, "cn.cmgame.miguimsdk.IMService");
 		intent.setComponent(cn);
 		intent.setAction(action);
 
@@ -59,21 +55,5 @@ public class IMManager
 
 		sAppContext.startService(intent);
 	}
-
-//	public static void initialize(Context context)
-//	{
-//		IMCore.getInstance().initialize(context);
-//	}
-//
-//	public static void connect(MiguIM.ConnectArgs args,
-//			MiguIM.IConnectionListener connectionListener, MiguIM.IMsgListener msgListener)
-//	{
-//		IMCore.getInstance().connect(args, connectionListener, msgListener);
-//	}
-//
-//	public static void disconnect()
-//	{
-//		IMCore.getInstance().disconnect();
-//	}
 
 }

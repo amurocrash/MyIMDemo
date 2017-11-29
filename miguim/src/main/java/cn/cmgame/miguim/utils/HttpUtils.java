@@ -1,10 +1,14 @@
 package cn.cmgame.miguim.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,17 +40,18 @@ public class HttpUtils
 	public interface IHttpListener<T>
 	{
 		void onSuccess(T result);
+
 		void onFailed();
 	}
 
-	public static<T> void request(
+	public static <T> void request(
 			final String url, final Map<String, String> params,
 			final Class<T> classOfT, final IHttpListener<T> listener)
 	{
 		request(url, POST, DEFAULT_ENCODING, null, params, classOfT, listener, false, null);
 	}
 
-	public static<T> void request(
+	public static <T> void request(
 			final String url, final Map<String, String> params,
 			final Class<T> classOfT, final IHttpListener<T> listener,
 			boolean isMock, String mockJson)
@@ -54,7 +59,7 @@ public class HttpUtils
 		request(url, POST, DEFAULT_ENCODING, null, params, classOfT, listener, isMock, mockJson);
 	}
 
-	public static<T> void request(
+	public static <T> void request(
 			final String url, final String method, final String encoding,
 			final Map<String, String> headers, final Map<String, String> params,
 			final Class<T> classOfT, final IHttpListener<T> listener,
@@ -66,7 +71,7 @@ public class HttpUtils
 			@Override
 			public void run()
 			{
-				if(isMock)
+				if (isMock)
 				{
 					try
 					{
@@ -78,7 +83,8 @@ public class HttpUtils
 					}
 
 					Gson gson = new GsonBuilder().create();
-					T result = gson.fromJson(mockJson, classOfT);;
+					T result = gson.fromJson(mockJson, classOfT);
+					;
 					deliverToMainThread(result, listener);
 				}
 				else
@@ -93,7 +99,7 @@ public class HttpUtils
 		});
 	}
 
-	private static<T> void deliverToMainThread(
+	private static <T> void deliverToMainThread(
 			final T result, final IHttpListener<T> listener)
 	{
 		Handler handler = new Handler(Looper.getMainLooper());
@@ -102,7 +108,7 @@ public class HttpUtils
 			@Override
 			public void run()
 			{
-				if(result == null)
+				if (result == null)
 				{
 					listener.onFailed();
 				}
@@ -115,7 +121,7 @@ public class HttpUtils
 		});
 	}
 
-	public static<T> T syncRequest(
+	public static <T> T syncRequest(
 			String url, String method, String encoding,
 			Map<String, String> headers, Map<String, String> params, Class<T> classOfT)
 	{
@@ -130,7 +136,7 @@ public class HttpUtils
 			setRequestParams(urlConnection, encoding, params);
 
 			int responseCode = urlConnection.getResponseCode();
-			if(responseCode != 200)
+			if (responseCode != 200)
 			{
 				throw new Exception("response code not 200. It it " + responseCode);
 			}
@@ -191,7 +197,7 @@ public class HttpUtils
 	private static void setRequestHeaders(
 			HttpURLConnection connection, Map<String, String> headers)
 	{
-		if(headers == null)
+		if (headers == null)
 		{
 			return;
 		}
@@ -241,4 +247,208 @@ public class HttpUtils
 		return encodedParams.toString().getBytes(paramsEncoding);
 	}
 
+	public interface IBitmapListener
+	{
+		void onSuccess(Bitmap bitmap);
+		void onFailed();
+	}
+
+	public static void getImage(final String url, final IBitmapListener bitmapListener)
+	{
+		final ExecutorService thread = Executors.newSingleThreadExecutor();
+		thread.execute(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				final Bitmap bitmap = syncGetImage(url);
+				if(bitmapListener != null)
+				{
+					Handler handler = new Handler(Looper.getMainLooper());
+					handler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							if(bitmap != null)
+							{
+								bitmapListener.onSuccess(bitmap);
+							}
+							else
+							{
+								bitmapListener.onFailed();
+							}
+						}
+					});
+				}
+
+				thread.shutdown();
+			}
+
+		});
+	}
+
+	private static Bitmap syncGetImage(String url)
+	{
+		Bitmap bm = null;
+		// 1、确定网址
+		// http://pic39.nipic.com/20140226/18071023_164300608000_2.jpg
+		// 2、获取Uri
+		try
+		{
+			URL uri = new URL(url);
+
+			// 3、获取连接对象、此时还没有建立连接
+			HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
+			// 4、初始化连接对象
+			// 设置请求的方法，注意大写
+			connection.setRequestMethod("GET");
+			// 读取超时
+			connection.setReadTimeout(5000);
+			// 设置连接超时
+			connection.setConnectTimeout(5000);
+			// 5、建立连接
+			connection.connect();
+
+			// 6、获取成功判断,获取响应码
+			if (connection.getResponseCode() == 200)
+			{
+				// 7、拿到服务器返回的流，客户端请求的数据，就保存在流当中
+				InputStream is = connection.getInputStream();
+				// 8、从流中读取数据，构造一个图片对象GoogleAPI
+				bm = BitmapFactory.decodeStream(is);
+
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return bm;
+	}
+
+	public interface IDownloadListener
+	{
+		void onSuccess(File file);
+		void onFailed();
+	}
+
+	public static void downloadFile(
+			final String url, final String fileName, final IDownloadListener downloadListener)
+	{
+		final ExecutorService thread = Executors.newSingleThreadExecutor();
+		thread.execute(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				final File file = syncGetFile(url, fileName);
+
+				if(downloadListener != null)
+				{
+					Handler handler = new Handler(Looper.getMainLooper());
+					handler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							if(file != null)
+							{
+								downloadListener.onSuccess(file);
+							}
+							else
+							{
+								downloadListener.onFailed();
+							}
+						}
+					});
+				}
+
+				thread.shutdown();
+			}
+		});
+	}
+
+	private static File syncGetFile(String url, String fileName)
+	{
+		File file = null;
+
+		try
+		{
+			URL uri = new URL(url);
+
+			// 3、获取连接对象、此时还没有建立连接
+			HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
+			// 4、初始化连接对象
+			// 设置请求的方法，注意大写
+			connection.setRequestMethod("GET");
+			// 读取超时
+			connection.setReadTimeout(5000);
+			// 设置连接超时
+			connection.setConnectTimeout(5000);
+			// 5、建立连接
+			connection.connect();
+
+			// 6、获取成功判断,获取响应码
+			if (connection.getResponseCode() == 200)
+			{
+				// 7、拿到服务器返回的流，客户端请求的数据，就保存在流当中
+				InputStream is = connection.getInputStream();
+				// 8、开启文件输出流，把读取到的字节写到本地缓存文件
+				file = new File(fileName);
+				FileOutputStream fos = new FileOutputStream(file);
+				int len = 0;
+				byte[] b = new byte[1024];
+				while ((len = is.read(b)) != -1)
+				{
+					fos.write(b, 0, len);
+				}
+				fos.close();
+				is.close();
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return file;
+	}
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

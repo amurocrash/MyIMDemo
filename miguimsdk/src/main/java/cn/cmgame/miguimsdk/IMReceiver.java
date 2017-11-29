@@ -1,10 +1,8 @@
-package cn.cmgame.miguim;
+package cn.cmgame.miguimsdk;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import cn.cmgame.miguim.utils.ToastUtils;
 
 /**
  * Created by Amuro on 2017/11/16.
@@ -32,14 +30,21 @@ public class IMReceiver extends BroadcastReceiver
 		}
 
 		String action = intent.getAction();
-		if("android.intent.action.ACTION_POWER_CONNECTED".equals(action))
+		if("cn.cmgame.miguim.invoke".equals(action))
 		{
-			ToastUtils.show(context, action);
+
 		}
-		else if("cn.cmgame.miguim.invoke".equals(action))
+		else if("android.intent.action.BOOT_COMPLETED".equals(action) ||
+				"android.net.conn.CONNECTIVITY_CHANGE".equals(action) ||
+				"android.intent.action.USER_PRESENT".equals(action) ||
+				"android.intent.action.MEDIA_MOUNTED".equals(action) ||
+				"android.intent.action.ACTION_POWER_CONNECTED".equals(action) ||
+				"android.intent.action.ACTION_POWER_DISCONNECTED".equals(action))
 		{
-			ToastUtils.show(context, action);
+			//TODO 拉活长连接service
+
 		}
+
 	}
 }
 

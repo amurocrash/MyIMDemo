@@ -1,8 +1,5 @@
 package cn.cmgame.miguim.core.packet;
 
-import java.util.Map;
-
-import cn.cmgame.miguim.MiguIM;
 import cn.cmgame.miguim.utils.gson.JsonObject;
 
 /**

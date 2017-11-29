@@ -6,13 +6,14 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import cn.cmgame.miguim.MiguIM;
+import cn.cmgame.miguim.SocketManager;
 import cn.cmgame.miguim.core.packet.AbsSocketPacket;
 import cn.cmgame.miguim.core.packet.SerialGenerator;
 import cn.cmgame.miguim.core.packet.VerifyPacket;
@@ -34,7 +35,7 @@ import cn.cmgame.miguim.utils.gson.JsonObject;
 public class SocketCore
 {
 	private static final String TAG = "socket_core";
-	private static final String TOKEN_URL = "http://192.168.1.102:8080/token";
+	private static final String TOKEN_URL = "http://223.111.8.99:8001/mpp-portal";
 
 	public static final int STATE_DISCONNECTED = 0;
 	public static final int STATE_DISCONNECTING = 1;
@@ -46,7 +47,7 @@ public class SocketCore
 	public static Logger logger;
 	private SocketManager mSocketManager;
 	private ConfigManager mConfigManager;
-	private MiguIM.ConnectArgs connectArgs;
+	private SocketManager.ConnectArgs connectArgs;
 
 	private Socket socketClient;
 
@@ -92,7 +93,7 @@ public class SocketCore
 		return mSocketManager;
 	}
 
-	public void connect(final MiguIM.ConnectArgs args)
+	public void connect(final SocketManager.ConnectArgs args)
 	{
 		//fetched token and token is valid, directly connect socket
 		if(mConfigManager != null && mConfigManager.isTokenValid())
@@ -108,7 +109,10 @@ public class SocketCore
 		}
 
 		mConfigManager.setMock(true);
-		mConfigManager.requestToken(new ConfigManager.ITokenListener()
+		Map<String, String> params = new HashMap<>();
+		params.put("device", "");
+		params.put("appid", "");
+		mConfigManager.requestToken(params, new ConfigManager.ITokenListener()
 			{
 				@Override
 				public void onSuccess()
@@ -126,13 +130,13 @@ public class SocketCore
 
 	}
 
-	private void realConnect(MiguIM.ConnectArgs args)
+	private void realConnect(SocketManager.ConnectArgs args)
 	{
 		if (!isDisconnected())
 		{
 			mSocketManager.publishResult(
 					SocketManager.RESULT_CONNECT_FAILED,
-					MiguIM.ErrorCode.NOT_DISCONNECT, "");
+					SocketManager.ErrorCode.NOT_DISCONNECT, "");
 
 			return;
 		}
@@ -285,7 +289,7 @@ public class SocketCore
 
 				mSocketManager.publishResult(
 						SocketManager.RESULT_CONNECT_FAILED,
-						MiguIM.ErrorCode.CONNECT_EXCEPTION, e.getMessage());
+						SocketManager.ErrorCode.CONNECT_EXCEPTION, e.getMessage());
 
 				disconnect();
 			}

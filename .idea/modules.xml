@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MiguIMDemo.iml" filepath="$PROJECT_DIR$/MiguIMDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/miguim/miguim.iml" filepath="$PROJECT_DIR$/miguim/miguim.iml" />
+      <module fileurl="file://$PROJECT_DIR$/miguimsdk/miguimsdk.iml" filepath="$PROJECT_DIR$/miguimsdk/miguimsdk.iml" />
     </modules>
   </component>
 </project>

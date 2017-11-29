@@ -1,5 +1,7 @@
 package cn.cmgame.miguim.core.tokenmanager;
 
+import java.util.Map;
+
 import cn.cmgame.miguim.core.SocketCore;
 import cn.cmgame.miguim.utils.DeviceUtils;
 import cn.cmgame.miguim.utils.HttpUtils;
@@ -35,11 +37,11 @@ public class ConfigManager
 		this.mIsMock = isMock;
 	}
 
-	public void requestToken(final ITokenListener tokenListener)
+	public void requestToken(Map<String, String> params, final ITokenListener tokenListener)
 	{
 		HttpUtils.request(
 				mTokenUrl,
-				null,
+				params,
 				TokenBean.class,
 				new IHttpListener<TokenBean>()
 				{
@@ -122,7 +124,7 @@ public class ConfigManager
 				"server:\"192.168.1.5\", \n" +
 				"port:5222, \n" +
 				"expire:7200, \n" +
-				"heartbeat:180, \n" +
+				"heartbeat:60, \n" +
 				"timeout:200 \n" +
 				"}";
 	}

@@ -3,7 +3,6 @@ package cn.cmgame.miguim.core.packet.disposer;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import cn.cmgame.miguim.MiguIM;
 import cn.cmgame.miguim.core.SocketCore;
 import cn.cmgame.miguim.core.packet.AbsSocketPacket;
 import cn.cmgame.miguim.core.packet.receiver.ReceiveMsg;

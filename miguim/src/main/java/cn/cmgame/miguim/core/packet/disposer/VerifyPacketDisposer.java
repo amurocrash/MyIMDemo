@@ -1,8 +1,7 @@
 package cn.cmgame.miguim.core.packet.disposer;
 
-import cn.cmgame.miguim.MiguIM;
 import cn.cmgame.miguim.core.SocketCore;
-import cn.cmgame.miguim.core.SocketManager;
+import cn.cmgame.miguim.SocketManager;
 import cn.cmgame.miguim.core.packet.VerifyPacket;
 
 /**
@@ -30,7 +29,7 @@ public class VerifyPacketDisposer extends AbsPacketDisposer<VerifyPacket>
 		logger.v("verify timeout");
 		socketCore.getSocketManager().publishResult(
 				SocketManager.RESULT_CONNECT_FAILED,
-				MiguIM.ErrorCode.CONNECT_TIMEOUT, "");
+				SocketManager.ErrorCode.CONNECT_TIMEOUT, "");
 		socketCore.disconnect();
 	}
 

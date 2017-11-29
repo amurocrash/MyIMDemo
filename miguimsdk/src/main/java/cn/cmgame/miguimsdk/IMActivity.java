@@ -1,4 +1,4 @@
-package cn.cmgame.miguim;
+package cn.cmgame.miguimsdk;
 
 import android.app.Activity;
 import android.os.Bundle;

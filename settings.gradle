@@ -1,1 +1,1 @@
-include ':app', ':miguim'
+include ':app', ':miguim', ':miguimsdk'

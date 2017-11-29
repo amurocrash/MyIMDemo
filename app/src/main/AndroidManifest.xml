@@ -33,7 +33,7 @@
             android:name="MIGU_APP_KEY"
             android:value="1234567890" />
 
-        <service android:name="cn.cmgame.miguim.IMService"
+        <service android:name="cn.cmgame.miguimsdk.IMService"
                  android:exported="true"
                  android:process=":imservice"
         >
@@ -43,7 +43,7 @@
 
         </service>
 
-        <receiver android:name="cn.cmgame.miguim.IMReceiver"
+        <receiver android:name="cn.cmgame.miguimsdk.IMReceiver"
             >
             <intent-filter>
                 <action android:name="cn.cmgame.miguim.invoke"/>
@@ -57,7 +57,7 @@
         </receiver>
 
         <activity
-            android:name="cn.cmgame.miguim.IMActivity"
+            android:name="cn.cmgame.miguimsdk.IMActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:process=":imservice"
