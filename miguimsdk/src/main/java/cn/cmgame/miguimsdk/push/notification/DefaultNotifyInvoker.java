@@ -1,4 +1,4 @@
-package cn.cmgame.miguim.push.notification;
+package cn.cmgame.miguimsdk.push.notification;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -10,8 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 
-import cn.cmgame.miguim.push.PushBean;
 import cn.cmgame.miguim.utils.ResourcesUtils;
+import cn.cmgame.miguimsdk.push.PushBean;
 
 /**
  * ImagePath中

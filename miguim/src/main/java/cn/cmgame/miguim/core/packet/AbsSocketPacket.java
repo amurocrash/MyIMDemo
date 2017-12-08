@@ -5,6 +5,7 @@ package cn.cmgame.miguim.core.packet;
  */
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Map;
 
 import cn.cmgame.miguim.utils.ByteArrayUtils;
@@ -194,6 +195,20 @@ public abstract class AbsSocketPacket
 		return serial;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "SendPacket{" +
+				"headLength=" + headLength +
+				", protocolVer=" + protocolVer +
+				", msgType=" + msgType +
+				", serialBytes=" + Arrays.toString(serialBytes) +
+				", replyMark=" + replyMark +
+				", compressMark=" + compressMark +
+				", serial=" + serial +
+				", msgBody='" + msgBody + '\'' +
+				'}';
+	}
 }
 
 

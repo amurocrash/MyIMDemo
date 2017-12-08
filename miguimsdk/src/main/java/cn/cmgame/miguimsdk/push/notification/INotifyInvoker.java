@@ -1,4 +1,4 @@
-package cn.cmgame.miguim.push.notification;
+package cn.cmgame.miguimsdk.push.notification;
 
 public interface INotifyInvoker
 {

@@ -23,7 +23,8 @@ public class SocketManager
 	public static final String RESULT_CONNECT_SUCCESS = "result_connect_success";
 	public static final String RESULT_CONNECT_FAILED = "result_connect_failed";
 	public static final String RESULT_DISCONNECTED = "result_disconnected";
-	public static final String RESULT_NEW_MSG = "result_new_msg";
+	public static final String RESULT_NEW_MSG_PUSH = "result_new_msg_push";
+	public static final String RESULT_NEW_MSG_PUSH_PASS_THROUGH = "result_new_msg_pass_through";
 
 	public class ErrorCode
 	{
@@ -31,6 +32,7 @@ public class SocketManager
 		public static final int NOT_DISCONNECT = 1;
 		public static final int CONNECT_EXCEPTION = 2;
 		public static final int CONNECT_TIMEOUT = 3;
+		public static final int TOKEN_FETCH_FAILED = 4 ;
 	}
 
 	public static class ConnectArgs
@@ -93,6 +95,13 @@ public class SocketManager
 	public void init(Class callbackClass)
 	{
 		this.callbackClass = callbackClass;
+		DeviceInfo.deviceId = DeviceUtils.getDeviceId(mContext);
+		DeviceInfo.imei = DeviceUtils.getIMEI(mContext);
+		DeviceInfo.imsi = DeviceUtils.getIMSI(mContext);
+		DeviceInfo.tel = DeviceUtils.getTel(mContext);
+		DeviceInfo.iccid = DeviceUtils.getICCID(mContext);
+		DeviceInfo.brand = DeviceUtils.getBrand();
+		DeviceInfo.model = DeviceUtils.getModel();
 		publishResult(RESULT_INIT_SUCCESS);
 	}
 
@@ -101,14 +110,6 @@ public class SocketManager
 		if(socketCore == null)
 		{
 			socketCore = new SocketCore(this);
-
-			DeviceInfo.deviceId = DeviceUtils.getDeviceId(mContext);
-			DeviceInfo.imei = DeviceUtils.getIMEI(mContext);
-			DeviceInfo.imsi = DeviceUtils.getIMSI(mContext);
-			DeviceInfo.tel = DeviceUtils.getTel(mContext);
-			DeviceInfo.iccid = DeviceUtils.getICCID(mContext);
-			DeviceInfo.brand = DeviceUtils.getBrand();
-			DeviceInfo.model = DeviceUtils.getModel();
 		}
 
 		ConnectArgs args = new ConnectArgs();

@@ -11,13 +11,6 @@ import java.util.Map;
  */
 public class MiguIM
 {
-	public static class ConnectArgs implements Serializable
-	{
-		public String appId;
-		public String appKey;
-		public Map<String, String> exts;
-	}
-
 	public class ErrorCode
 	{
 		public static final int CONNECT_SUCCESS = 0;
@@ -31,10 +24,27 @@ public class MiguIM
 		IMManager.initialize(context, callbackClass);
 	}
 
-	public static void connect(ConnectArgs args)
+	public static void connect()
 	{
-		IMManager.connect(args);
+		IMManager.connect();
 	}
+
+	public static void connect(String appId, String appKey)
+	{
+		IMManager.connect(appId, appKey);
+	}
+
+	public static void connect(Map<String, String> exts)
+	{
+		IMManager.connect(exts);
+	}
+
+	public static void connect(String appId, String appKey, Map<String, String> exts)
+	{
+		IMManager.connect(appId, appKey, exts);
+	}
+
+
 
 	public static void disconnect()
 	{

@@ -16,6 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import cn.cmgame.miguim.SocketManager;
 import cn.cmgame.miguim.core.packet.AbsSocketPacket;
 import cn.cmgame.miguim.core.packet.SerialGenerator;
+import cn.cmgame.miguim.core.packet.UnifyRespPacket;
 import cn.cmgame.miguim.core.packet.VerifyPacket;
 import cn.cmgame.miguim.core.packet.disposer.AbsPacketDisposer;
 import cn.cmgame.miguim.core.packet.HeartbeatPacket;
@@ -35,7 +36,7 @@ import cn.cmgame.miguim.utils.gson.JsonObject;
 public class SocketCore
 {
 	private static final String TAG = "socket_core";
-	private static final String TOKEN_URL = "http://223.111.8.99:8001/mpp-portal";
+	private static final String TOKEN_URL = "http://223.111.8.99:8001/mpp-portal/token";
 
 	public static final int STATE_DISCONNECTED = 0;
 	public static final int STATE_DISCONNECTING = 1;
@@ -108,10 +109,10 @@ public class SocketCore
 			mConfigManager = new ConfigManager(TOKEN_URL);
 		}
 
-		mConfigManager.setMock(true);
+//		mConfigManager.setMock(true);
 		Map<String, String> params = new HashMap<>();
-		params.put("device", "");
-		params.put("appid", "");
+		params.put("device", SocketManager.DeviceInfo.deviceId);
+		params.put("appid", args.appId);
 		mConfigManager.requestToken(params, new ConfigManager.ITokenListener()
 			{
 				@Override
@@ -123,7 +124,9 @@ public class SocketCore
 				@Override
 				public void onFailed()
 				{
-					mSocketManager.publishResult(SocketManager.RESULT_CONNECT_FAILED);
+					mSocketManager.publishResult(
+							SocketManager.RESULT_CONNECT_FAILED,
+							SocketManager.ErrorCode.TOKEN_FETCH_FAILED, "token fetch failed");
 				}
 			}
 		);
@@ -136,7 +139,7 @@ public class SocketCore
 		{
 			mSocketManager.publishResult(
 					SocketManager.RESULT_CONNECT_FAILED,
-					SocketManager.ErrorCode.NOT_DISCONNECT, "");
+					SocketManager.ErrorCode.NOT_DISCONNECT, "socket is connecting");
 
 			return;
 		}
@@ -228,6 +231,25 @@ public class SocketCore
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public void disposeUnifyResp(ReceiveMsg receiveMsg)
+	{
+		AbsPacketDisposer disposer =
+				sendingPktManager.allPacketMap.remove(
+						receiveMsg.getParam("sequence").getAsInt());
+		disposer.disposeResp(receiveMsg);
+	}
+
+	public void responseToServerWithUnifyResp(int serverSerial)
+	{
+		JsonObject params = new JsonObject();
+		params.addProperty("sequence", serverSerial);
+		params.addProperty("status", 0);
+		params.addProperty("message", "");
+		UnifyRespPacket unifyRespPacket =
+				new UnifyRespPacket(serialGenerator.addAndGet(), params);
+		enqueuePacket(unifyRespPacket);
 	}
 
 	/**************************连接线程**************************/
@@ -454,7 +476,8 @@ public class SocketCore
 									System.arraycopy(bufferLength, 0, buffer, 0, 4);
 									System.arraycopy(bufferBody, 0, buffer, 4, body_length);
 
-									sendingPktManager.disposeResp(buffer);
+//									sendingPktManager.disposeResp(buffer);
+									PacketReceiver.parsePacketNew(buffer, SocketCore.this);
 
 									// 重置
 									bufferBody = null;
@@ -568,54 +591,52 @@ public class SocketCore
 			allPacketMap.put(serial, packetDisposer);
 		}
 
-		private void disposeResp(byte[] originalData) throws Exception
-		{
-			ReceiveMsg receiveMsg = PacketReceiver.parsePacket(originalData);
-			if(AbsSocketPacket.TYPE_SYSTEM == receiveMsg.getMsgType())
-			{
-				if("response".equals(receiveMsg.getOperate()))
-				{
-					AbsPacketDisposer disposer =
-							allPacketMap.remove(
-									receiveMsg.getParam("sequence").getAsInt());
-					disposer.disposeResp(receiveMsg);
-				}
-				else
-				{
-					//目前服务端还没有其他的系统消息，先留着
-					logger.v("fxxking system msg with operate: " +
-							receiveMsg.getOperate() + " which can't be disposed.");
-				}
-			}
-			else if(AbsSocketPacket.TYPE_BIZ == receiveMsg.getMsgType())
-			{
-				Bundle data = new Bundle();
-				data.putString("msg", receiveMsg.getBaseJson());
-				mSocketManager.publishResult(
-						SocketManager.RESULT_NEW_MSG, data);
-			}
-			else
-			{
-				throw new Exception(
-						"can't dispose the msg which type is " + receiveMsg.getMsgType());
-			}
-
-//			ReceiveMsg response = PacketReceiver.parsePacket(buffer);
-//			if (response.getType() == AbsSocketPacket.TYPE_UNIFIED_RESP)
+//		private void disposeResp(byte[] originalData) throws Exception
+//		{
+//			ReceiveMsg receiveMsg = PacketReceiver.parsePacket(originalData);
+//			logger.v("receive a msg: " + receiveMsg.toString());
+//
+//			if(AbsSocketPacket.TYPE_SYSTEM == receiveMsg.getMsgType())
 //			{
-//				AbsSocketPacket packet = allPacketMap.remove(response.getSerial());
-//				packet.getSender().disposeResp(response.getContent(), packet.getSendingListener());
+//				if("response".equals(receiveMsg.getOperate()))
+//				{
+//					AbsPacketDisposer disposer =
+//							allPacketMap.remove(
+//									receiveMsg.getParam("sequence").getAsInt());
+//					disposer.disposeResp(receiveMsg);
+//				}
+//				else
+//				{
+//					//目前服务端还没有其他的系统消息，先留着
+//					logger.v("fxxking system msg with operate: " +
+//							receiveMsg.getOperate() + " which can't be disposed.");
+//				}
 //			}
-//			else if(response.getType() == AbsSocketPacket.TYPE_BIZ_SELF)
+//			else if(AbsSocketPacket.TYPE_BIZ == receiveMsg.getMsgType())
 //			{
-//				LogUtils.e("收到服务端的serial：" + response.getSerial());
-//				APacketDisposer disposer =
-//						PacketDisposerFactory.getInstance().getPacketDisposer(response.getType(), 0);
-//				disposer.init(SocketCore.this);
-//				disposer.onMsgArrived(response.getContent(), response.getSerial());
+//				String json = receiveMsg.getBaseJson();
+//
+//
+//				Bundle data = new Bundle();
+//				data.putString("msg", receiveMsg.getBaseJson());
+//				mSocketManager.publishResult(
+//						SocketManager.RESULT_NEW_MSG, data);
+//
+//				JsonObject params = new JsonObject();
+//				params.addProperty("sequence", receiveMsg.getServerSerial());
+//				params.addProperty("status", 0);
+//				params.addProperty("message", "");
+//				UnifyRespPacket unifyRespPacket =
+//						new UnifyRespPacket(serialGenerator.addAndGet(), params);
+//				enqueuePacket(unifyRespPacket);
 //			}
-
-		}
+//			else
+//			{
+//				throw new Exception(
+//						"can't dispose the msg which type is " + receiveMsg.getMsgType());
+//			}
+//
+//		}
 
 		private void scanAllPkt()
 		{

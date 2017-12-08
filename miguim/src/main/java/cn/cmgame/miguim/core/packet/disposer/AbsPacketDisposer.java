@@ -7,11 +7,17 @@ import cn.cmgame.miguim.core.SocketCore;
 import cn.cmgame.miguim.core.packet.AbsSocketPacket;
 import cn.cmgame.miguim.core.packet.receiver.ReceiveMsg;
 import cn.cmgame.miguim.utils.Logger;
+import cn.cmgame.miguim.utils.StreamUtils;
 
 /**
  * Created by Amuro on 2017/11/7.
  */
 
+/**
+ * 客户端发送消息的核心父类
+ * @param <T> 对应的协议byte流封装类
+ * @see AbsSocketPacket
+ */
 public abstract class AbsPacketDisposer<T extends AbsSocketPacket>
 {
 	protected SocketCore socketCore;
@@ -49,36 +55,42 @@ public abstract class AbsPacketDisposer<T extends AbsSocketPacket>
 			outputStream = socketClient.getOutputStream();
 		}
 
-		byte[] data = packetForSend.generateFinalData();
-		int bufferSize = socketClient.getSendBufferSize();
+		logger.v(packetForSend.toString());
+		StreamUtils.sendPacket(
+					outputStream,
+					packetForSend.generateFinalData(),
+					socketClient.getSendBufferSize());
 
-		if (data.length <= bufferSize)
-		{
-			outputStream.write(data);
-			outputStream.flush();
-		}
-		else
-		{
-			int totalLength = data.length;
-			int sendLength = 0;
-
-			while (sendLength < totalLength)
-			{
-				int count;
-				if (totalLength - sendLength >= bufferSize)
-				{
-					count = bufferSize;
-				}
-				else
-				{
-					count = totalLength - sendLength;
-				}
-
-				sendLength += count;
-				outputStream.write(data, sendLength, count);
-				outputStream.flush();
-			}
-		}
+//		byte[] data = packetForSend.generateFinalData();
+//		int bufferSize = socketClient.getSendBufferSize();
+//
+//		if (data.length <= bufferSize)
+//		{
+//			outputStream.write(data);
+//			outputStream.flush();
+//		}
+//		else
+//		{
+//			int totalLength = data.length;
+//			int sendLength = 0;
+//
+//			while (sendLength < totalLength)
+//			{
+//				int count;
+//				if (totalLength - sendLength >= bufferSize)
+//				{
+//					count = bufferSize;
+//				}
+//				else
+//				{
+//					count = totalLength - sendLength;
+//				}
+//
+//				sendLength += count;
+//				outputStream.write(data, sendLength, count);
+//				outputStream.flush();
+//			}
+//		}
 
 		this.sendTime = System.currentTimeMillis();
 //		packet.setSendTime(System.currentTimeMillis());

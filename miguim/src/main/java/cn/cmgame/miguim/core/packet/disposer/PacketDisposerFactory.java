@@ -3,6 +3,7 @@ package cn.cmgame.miguim.core.packet.disposer;
 import cn.cmgame.miguim.core.SocketCore;
 import cn.cmgame.miguim.core.packet.AbsSocketPacket;
 import cn.cmgame.miguim.core.packet.HeartbeatPacket;
+import cn.cmgame.miguim.core.packet.UnifyRespPacket;
 import cn.cmgame.miguim.core.packet.UploadInfoPacket;
 import cn.cmgame.miguim.core.packet.VerifyPacket;
 
@@ -28,6 +29,10 @@ public class PacketDisposerFactory
 		else if(HeartbeatPacket.class.equals(packet.getClass()))
 		{
 			packetDisposer = new HeartbeatPacketDisposer((HeartbeatPacket)packet, core);
+		}
+		else if(UnifyRespPacket.class.equals(packet.getClass()))
+		{
+			packetDisposer = new UnifyRespDisposer((UnifyRespPacket) packet, core);
 		}
 
 		return packetDisposer;

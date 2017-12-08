@@ -101,4 +101,18 @@ public class ReceiveMsg
 	{
 		return baseBean.exts.get(key);
 	}
+
+	@Override
+	public String toString()
+	{
+		return "ReceiveMsg{" +
+				"protocolVer=" + protocolVer +
+				", msgType=" + msgType +
+				", serverSerial=" + serverSerial +
+				", replyMark=" + replyMark +
+				", compressMark=" + compressMark +
+				", baseJson='" + baseJson + '\'' +
+				", baseBean=" + baseBean +
+				'}';
+	}
 }

@@ -84,7 +84,7 @@ public class HttpUtils
 
 					Gson gson = new GsonBuilder().create();
 					T result = gson.fromJson(mockJson, classOfT);
-					;
+
 					deliverToMainThread(result, listener);
 				}
 				else
@@ -138,7 +138,7 @@ public class HttpUtils
 			int responseCode = urlConnection.getResponseCode();
 			if (responseCode != 200)
 			{
-				throw new Exception("response code not 200. It it " + responseCode);
+				throw new Exception("response code not 200. It is " + responseCode);
 			}
 			else
 			{

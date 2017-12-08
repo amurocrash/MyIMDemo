@@ -60,30 +60,20 @@ public class IMService extends Service
 					mSocketManager = new SocketManagerProxy(this);
 				}
 
-//				mSocketManager.setMock(true);
+				mSocketManager.setMock(true);
 				Class<? extends IMIntentService> callbackClass =
 						(Class<? extends IMIntentService>)intent.getSerializableExtra("callback");
 
 				saveCallbackClassName(callbackClass.getName());
 				mSocketManager.init(callbackClass);
 
-//				if(mSocketManager == null)
-//				{
-//					mSocketManager = new SocketManager(this);
-//				}
-//
-//				Class<? extends IMIntentService> callbackClass =
-//						(Class<? extends IMIntentService>)intent.getSerializableExtra("callback");
-//
-//				mSocketManager.init(callbackClass);
-
 			}
 			else if(ACTION_CONNECT.equals(action))
 			{
 				if(mSocketManager != null)
 				{
-					MiguIM.ConnectArgs args =
-							(MiguIM.ConnectArgs) intent.getSerializableExtra("connectArgs");
+					IMManager.ConnectArgs args =
+							(IMManager.ConnectArgs) intent.getSerializableExtra("connectArgs");
 
 					saveArgs(args);
 					mSocketManager.connect(args);
@@ -117,7 +107,7 @@ public class IMService extends Service
 
 			mSocketManager.init(
 					(Class<? extends IMIntentService>) Class.forName(getCallbackClassName()));
-			MiguIM.ConnectArgs args = getArgsFromSp();
+			IMManager.ConnectArgs args = getArgsFromSp();
 			mSocketManager.connect(args);
 		}
 		catch (Exception e)
@@ -133,7 +123,7 @@ public class IMService extends Service
 		Log.v(TAG, "onDestroy");
 	}
 
-	private void saveArgs(MiguIM.ConnectArgs args)
+	private void saveArgs(IMManager.ConnectArgs args)
 	{
 		SharedPreferences sp = this.getSharedPreferences(SP_TAG, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
@@ -154,9 +144,9 @@ public class IMService extends Service
 		editor.commit();
 	}
 
-	private MiguIM.ConnectArgs getArgsFromSp()
+	private IMManager.ConnectArgs getArgsFromSp()
 	{
-		MiguIM.ConnectArgs connectArgs = new MiguIM.ConnectArgs();
+		IMManager.ConnectArgs connectArgs = new IMManager.ConnectArgs();
 		SharedPreferences sp = this.getSharedPreferences(SP_TAG, Context.MODE_PRIVATE);
 		String appId = sp.getString("appId", "");
 		String appKey = sp.getString("appKey", "");

@@ -28,11 +28,12 @@
 
         <meta-data
             android:name="MIGU_APP_ID"
-            android:value="1234567890" />
+            android:value="MG-SDK-10010181-636616036239" />
         <meta-data
             android:name="MIGU_APP_KEY"
             android:value="1234567890" />
 
+        <!--android:process=":imservice"-->
         <service android:name="cn.cmgame.miguimsdk.IMService"
                  android:exported="true"
                  android:process=":imservice"

@@ -7,6 +7,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 
+import cn.cmgame.miguimsdk.push.PushBean;
+import cn.cmgame.miguimsdk.push.notification.PushNotifyManager;
+
 /**
  * Created by Amuro on 2017/11/17.
  */
@@ -19,7 +22,9 @@ public abstract class IMIntentService extends IntentService
 	private static final String RESULT_CONNECT_SUCCESS = "result_connect_success";
 	private static final String RESULT_CONNECT_FAILED = "result_connect_failed";
 	private static final String RESULT_DISCONNECTED = "result_disconnected";
-	private static final String RESULT_NEW_MSG = "result_new_msg";
+	private static final String RESULT_NEW_MSG_PUSH = "result_new_msg_push";
+	private static final String RESULT_NEW_MSG_PUSH_PASS_THROUGH = "result_new_msg_pass_through";
+
 
 	private Handler handler;
 
@@ -28,20 +33,6 @@ public abstract class IMIntentService extends IntentService
 		super("IMIntentService");
 		handler = new Handler(Looper.getMainLooper());
 	}
-
-//	public static void onNewAction(
-//			Context mContext, Class<? extends IMIntentService> callbackClass,
-//			String action, String result, Bundle data)
-//	{
-//		Intent intent = new Intent(mContext, callbackClass);
-//		intent.setAction(action);
-//		intent.putExtra("result", result);
-//		if(data != null)
-//		{
-//			intent.putExtra("data", data);
-//		}
-//		mContext.startService(intent);
-//	}
 
 	@Override
 	protected void onHandleIntent(@Nullable final Intent intent)
@@ -82,11 +73,18 @@ public abstract class IMIntentService extends IntentService
 				{
 					onDisconnect();
 				}
-				else if (RESULT_NEW_MSG.equals(result))
+				else if (RESULT_NEW_MSG_PUSH.equals(result))
 				{
 					Bundle data = intent.getBundleExtra("data");
-					String msg = (String) data.get("msg");
-					onNewMsg(msg);
+					PushBean pushBean = (PushBean) data.get("pushBean");
+					PushNotifyManager pm = new PushNotifyManager(IMIntentService.this);
+					pm.doNotify(pushBean);
+				}
+				else if(RESULT_NEW_MSG_PUSH_PASS_THROUGH.equals(result))
+				{
+					Bundle data = intent.getBundleExtra("data");
+					String json = (String) data.get("msg");
+					onNewMsg(json);
 				}
 			}
 		});

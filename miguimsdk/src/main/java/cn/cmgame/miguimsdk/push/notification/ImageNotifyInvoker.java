@@ -1,4 +1,4 @@
-package cn.cmgame.miguim.push.notification;
+package cn.cmgame.miguimsdk.push.notification;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,8 +10,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
 
-import cn.cmgame.miguim.push.PushBean;
 import cn.cmgame.miguim.utils.ResourcesUtils;
+import cn.cmgame.miguimsdk.push.PushBean;
 
 public class ImageNotifyInvoker extends AbstractNotifyInvoker
 {

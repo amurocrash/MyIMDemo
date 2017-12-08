@@ -1,4 +1,4 @@
-package cn.cmgame.miguim.push;
+package cn.cmgame.miguimsdk.push;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,16 +8,14 @@ import java.util.List;
  */
 
 /**
- *  {"module":"0001",
- *  "data":"{\"title\":\"测试消息标题：1503901861274\",
- *  \"content\":\"测试消息内容：cebef204-1019-47c8-b02e-a45f780b7605\",
- *  \"link\":\"https://g.10086.cn/h/b9009472-705e-43f8-918b-3e7b2090bd05\",
- *  \"imgPath\":\"https://g.10086.cn/download/images/5cde6b7a-c6a2-4faf-87ac-bdda2923494b.jpg\",
- *  \"icon\":\"https://g.10086.cn/download/icons/dd95037b-5fb7-4612-8887-98e9005b5336.jpg\",
- *  \"description\":\"剽悍的人生不需要解释\",
- *  \"id\":\"665482070\",
- *  \"bindings\":[\"41262008\",\"10011000\",\"19030086\"],
- *  \"provisions\":[\"696816044768\"]}"}
+ *  '{
+ *  "id":5
+ *  "title":"测试消息标题：1512633020299",
+ *  "content":"测试消息内容：3eebffca-ed5c-4d70-961c-62f40c0638fa",
+ *  "link":"https://g.10086.cn/h/7b148889-3b49-402b-84ff-12cbe4730c50",
+ *  "imgPath":"https://g.10086.cn/download/images/b5aca12b-950b-45f1-8e55-a6ee9f1debb1.jpg",
+ *  "icon":"https://g.10086.cn/download/icons/53ea8e1d-cb59-4793-8130-b41a7539a512.jpg",
+ *  "description":"剽悍的人生不需要解释"}'
  */
 public class PushBean implements Serializable
 {
@@ -28,8 +26,8 @@ public class PushBean implements Serializable
     private String imgPath;
     private String icon;
     private String description;
-    private List<String> bindings;
-    private List<String> provisions;
+//    private List<String> bindings;
+//    private List<String> provisions;
 
     public String getId()
     {
@@ -101,23 +99,23 @@ public class PushBean implements Serializable
         this.description = description;
     }
 
-    public List<String> getChannels()
-    {
-        return bindings;
-    }
-
-    public void setBindings(List<String> bindings)
-    {
-        this.bindings = bindings;
-    }
-
-    public List<String> getContents()
-    {
-        return provisions;
-    }
-
-    public void setProvisions(List<String> provisions)
-    {
-        this.provisions = provisions;
-    }
+//    public List<String> getChannels()
+//    {
+//        return bindings;
+//    }
+//
+//    public void setBindings(List<String> bindings)
+//    {
+//        this.bindings = bindings;
+//    }
+//
+//    public List<String> getContents()
+//    {
+//        return provisions;
+//    }
+//
+//    public void setProvisions(List<String> provisions)
+//    {
+//        this.provisions = provisions;
+//    }
 }

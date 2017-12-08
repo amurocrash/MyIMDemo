@@ -1,4 +1,4 @@
-package cn.cmgame.miguim.push.notification;
+package cn.cmgame.miguimsdk.push.notification;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -15,8 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import cn.cmgame.miguim.push.PushBean;
 import cn.cmgame.miguim.utils.ResourcesUtils;
+import cn.cmgame.miguimsdk.push.PushBean;
 
 public class IconNotifyInvoker extends AbstractNotifyInvoker
 {

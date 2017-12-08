@@ -130,7 +130,7 @@ public class SocketManagerProxy
 	private Method connectMethod;
 	private Method disconnectMethod;
 
-	public void connect(MiguIM.ConnectArgs args)
+	public void connect(IMManager.ConnectArgs args)
 	{
 		try
 		{

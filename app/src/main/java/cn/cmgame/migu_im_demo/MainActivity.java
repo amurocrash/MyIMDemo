@@ -23,14 +23,14 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			public void onClick(View v)
 			{
-				MiguIM.ConnectArgs args = new MiguIM.ConnectArgs();
-				args.appId = "1234567890";
-				args.appKey = "1234567890";
-				args.exts = new HashMap<>();
-				args.exts.put("contentId", "12345678901");
-				args.exts.put("channelId", "3456789012345");
+//				MiguIM.ConnectArgs args = new MiguIM.ConnectArgs();
+//				args.appId = "MG-SDK-10010181-636616036239";
+//				args.appKey = "1234567890";
+//				args.exts = new HashMap<>();
+//				args.exts.put("contentId", "12345678901");
+//				args.exts.put("channelId", "3456789012345");
 
-				MiguIM.connect(args);
+				MiguIM.connect();
 			}
 		});
 

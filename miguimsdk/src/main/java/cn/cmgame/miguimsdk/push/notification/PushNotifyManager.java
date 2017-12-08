@@ -1,13 +1,13 @@
-package cn.cmgame.miguim.push.notification;
+package cn.cmgame.miguimsdk.push.notification;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
-import cn.cmgame.miguim.push.PushBean;
 import cn.cmgame.miguim.utils.HttpUtils;
 import cn.cmgame.miguim.utils.ResourcesUtils;
+import cn.cmgame.miguimsdk.push.PushBean;
 
 public class PushNotifyManager
 {
@@ -47,7 +47,7 @@ public class PushNotifyManager
 	{
 		new DefaultNotifyInvoker(context, msg).doNotify();
 	}
-	
+
 	private void doIconNotify(final PushBean msg)
 	{
 		HttpUtils.getImage(msg.getIcon(), new HttpUtils.IBitmapListener()
